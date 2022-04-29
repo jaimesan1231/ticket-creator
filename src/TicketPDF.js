@@ -76,28 +76,40 @@ function TicketPDF({ table, boleta }) {
             <View
               style={{
                 fontSize: "10px",
-                width: "50%",
+                width: "90%",
                 display: "flex",
                 flexDirection: "row",
-                justifyContent: "space-between",
                 marginBottom: "10px",
               }}
             >
-              <Text>Fecha:</Text>
-              <Text>2022-04-11</Text>
+              <Text style={{width:"30%"}}>Fecha:</Text>
+              <Text style={{width:"80%", textAlign:"left",marginLeft:"5px"}}>{boleta.fecha}</Text>
             </View>
             <View
               style={{
                 fontSize: "10px",
-                width: "100%",
+                width: "90%",
                 display: "flex",
                 flexDirection: "row",
-                justifyContent: "space-around",
                 marginBottom: "10px",
+                
               }}
             >
-              <Text>Cliente:</Text>
-              <Text style={styles.boldga}>{boleta.cliente}</Text>
+              <Text style={{width:"30%"}}>Cliente:</Text>
+              <Text style={{width:"80%", textAlign:"left",marginLeft:"5px"}}>{boleta.cliente}</Text>
+            </View>
+            <View
+              style={{
+                fontSize: "10px",
+                width: "90%",
+                display: "flex",
+                flexDirection: "row",
+                marginBottom: "10px",
+                
+              }}
+            >
+              <Text style={{width:"30%"}}>Nro Doc:</Text>
+              <Text style={{width:"80%", textAlign:"left",marginLeft:"5px"}}>{boleta.dni}</Text>
             </View>
             <View
               style={{
@@ -175,11 +187,11 @@ function TicketPDF({ table, boleta }) {
                 flexDirection: "row",
                 justifyContent: "space-around",
                 marginLeft: "50%",
-                marginTop: "10px",
+                marginTop: "10px"
               }}
             >
-              <Text>Subtotal:</Text>
-              <Text>{boleta.subtotal}</Text>
+              <Text style={{width:"40%",textAlign:"right",marginRight:"10px"}}>Subtotal:</Text>
+              <Text style={{width:"40%",textAlign:"right",marginRight:"10px"}}>{boleta.subtotal}</Text>
             </View>
             <View
               style={{
@@ -189,11 +201,11 @@ function TicketPDF({ table, boleta }) {
                 flexDirection: "row",
                 justifyContent: "space-around",
                 marginLeft: "50%",
-                marginTop: "10px",
+                marginTop: "10px"
               }}
             >
-              <Text>IGV:</Text>
-              <Text>{boleta.igv}</Text>
+              <Text style={{width:"40%",textAlign:"right",marginRight:"10px"}}>IGV:</Text>
+              <Text style={{width:"40%",textAlign:"right",marginRight:"10px"}}>{boleta.igv}</Text>
             </View>
             <View
               style={{
@@ -203,18 +215,18 @@ function TicketPDF({ table, boleta }) {
                 flexDirection: "row",
                 justifyContent: "space-around",
                 marginLeft: "50%",
-                marginTop: "10px",
+                marginTop: "10px"
               }}
             >
-              <Text>Total:</Text>
-              <Text>{boleta.total}</Text>
+              <Text style={{width:"40%",textAlign:"right",marginRight:"10px"}}>Total:</Text>
+              <Text style={{width:"40%",textAlign:"right",marginRight:"10px"}}>{boleta.total}</Text>
             </View>
             <View
               style={{
                 fontSize: "10px",
                 width: "100%",
                 textAlign: "center",
-                marginTop: "10px",
+                marginTop: "10px"
               }}
             >
               <Text>{boleta.nota}</Text>

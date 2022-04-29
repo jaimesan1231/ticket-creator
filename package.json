@@ -16,6 +16,8 @@
     "react-scripts": "4.0.3",
     "react-xml-parser": "^1.1.8",
     "stream-browserify": "^3.0.0",
+    "unrar": "^0.2.0",
+    "unzip": "^0.1.11",
     "util": "^0.12.4",
     "web-vitals": "^2.1.4"
   },

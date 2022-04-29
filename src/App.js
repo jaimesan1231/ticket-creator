@@ -6,19 +6,74 @@ import axios from "axios";
 import TicketPDF from "./TicketPDF";
 import { PDFViewer } from "@react-pdf/renderer";
 import { useState } from "react/cjs/react.development";
+import Unrar from "unrar";
 
+const Button=({handleConChange})=>{
+  
+  return(
+    <div>
+      <input type="file" onChange={(e)=>handleConChange(e)}/>
+    </div>
+  )
+}
+const Button2=({handleConChange})=>{
+  
+  return(
+    <div>
+      <input type="file" onChange={(e)=>handleConChange(e)}/>
+    </div>
+  )
+}
 function App() {
   const [table, seTable] = useState([]);
   const [boleta, setBoleta] = useState({});
+  const [newXml,setNewXml]=useState()
+  const [xmlDoc,setXmlDoc]=useState()
+  const handleConChange=(e)=>{
+    console.log(e.target.files[0])
+    const file=e.target.files[0]
+    const reader=new FileReader();
+    reader.onload=function(e){
+      console.log(e.target.result)
+      let xmlDoc=null;
+      if(window.DOMParser){
+        let parser=new DOMParser();
+        xmlDoc=parser.parseFromString(e.target.result,"text/xml")
+        console.log("AEA")
+        console.log(xmlDoc)
+        setXmlDoc(e.target.result)
+      }
+    }
+    reader.readAsText(file)
+    
+  }
+  const handleConChange2=(e)=>{
+    console.log(e.target.files[0])
+    const file=e.target.files[0]
+    const reader=new FileReader();
+    reader.onload=function(e){
+      console.log(e.target.result)
+      let archivo=new Unrar(e.target.result)
+      console.log(archivo)
+      archivo.list(function (err, entries) {
+        var stream = archivo.stream('some_binary_entry'); // name of entry
+        stream.on('error', console.error);
+        stream.pipe(require('fs').createWriteStream('some-binary-file'));
+      });
+    }
+    reader.readAsText(file)
+    
+  }
+  console.log(xmlDoc)
   useEffect(() => {
-    axios
-      .get("/Boleta.xml", {
-        "Content-Type": "application/xml; charset=utf-8",
-      })
-      .then((res) => {
-        const xml = new XMLParser().parseFromString(res.data);
+   
+    if(xmlDoc){
+      
+
+        const xml = new XMLParser().parseFromString(xmlDoc);
         console.log(xml);
         console.log(xml.getElementsByTagName("cbc:ID")[2].value);
+        console.log(xml.getElementsByTagName("cbc:ID")[3].value);
         console.log(xml.getElementsByTagName("cbc:Name")[1].value);
         console.log(xml.getElementsByTagName("cbc:RegistrationName")[0].value);
         console.log(xml.getElementsByTagName("cbc:Line")[0].value);
@@ -43,6 +98,8 @@ function App() {
                 1
             ),
           total: xml.getElementsByTagName("cbc:PayableAmount")[0].value,
+          dni:xml.getElementsByTagName("cbc:ID")[3].value,
+          fecha:xml.getElementsByTagName("cbc:IssueDate")[0].value,
         });
         const prices = [];
         xml.getElementsByTagName("cbc:PriceAmount").map((item, index) => {
@@ -87,14 +144,7 @@ function App() {
         console.log(xml.getElementsByTagName("cbc:PayableAmount")[0].value);
         console.log(xml.getElementsByTagName("cbc:Note")[0].value);
         console.log(xml.getElementsByTagName("cbc:RegistrationName")[1].value);
-        console.log(
-          xml
-            .getElementsByTagName("cbc:Description")[1]
-            .value.substring(
-              0,
-              xml.getElementsByTagName("cbc:Description")[1].value.length - 1
-            )
-        );
+        
         console.log(
           xml
             .getElementsByTagName("cbc:RegistrationName")[1]
@@ -112,13 +162,16 @@ function App() {
               xml.getElementsByTagName("cbc:Note")[0].value.length - 1
             )
         );
-      });
-  }, []);
+    }
+  }, [xmlDoc]);
   return (
     <div className="App">
       <PDFViewer style={{ width: "100%", height: "90vh" }}>
         <TicketPDF table={table} boleta={boleta} />
+        
       </PDFViewer>
+      <Button handleConChange={handleConChange}/>
+      <Button2 handleConChange={handleConChange2}/>
     </div>
   );
 }
