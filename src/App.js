@@ -1,9 +1,8 @@
 import "./App.css";
 import XMLParser from "react-xml-parser";
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import TicketPDF from "./TicketPDF";
 import { PDFViewer } from "@react-pdf/renderer";
-import { useState } from "react/cjs/react.development";
 
 const Button = ({ handleConChange }) => {
   return (
