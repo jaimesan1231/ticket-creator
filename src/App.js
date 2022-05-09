@@ -15,10 +15,12 @@ function App() {
   const [table, seTable] = useState([]);
   const [boleta, setBoleta] = useState({});
   const [xmlDoc, setXmlDoc] = useState();
+  const [type,setType]=useState("");
   const handleConChange = (e) => {
-    console.log(e.target.files[0]);
+    console.log(e.target.files[0].name.substring(0,6));
     const file = e.target.files[0];
     const reader = new FileReader();
+    const type=e.target.files[0].name.substring(0,6)
     reader.onload = function (e) {
       console.log(e.target.result);
       let xmlDoc = null;
@@ -27,7 +29,7 @@ function App() {
         xmlDoc = parser.parseFromString(e.target.result, "text/xml");
         console.log("AEA");
         console.log(xmlDoc);
-        setXmlDoc(e.target.result);
+        setXmlDoc({document:e.target.result,type: type});
       }
     };
     if (file) {
@@ -37,15 +39,7 @@ function App() {
   console.log(xmlDoc);
   useEffect(() => {
     if (xmlDoc) {
-      const xml = new XMLParser().parseFromString(xmlDoc);
-      console.log(xml);
-      console.log(xml.getElementsByTagName("cbc:ID")[2].value);
-      console.log(xml.getElementsByTagName("cbc:ID")[3].value);
-      console.log(xml.getElementsByTagName("cbc:Name")[1].value);
-      console.log(xml.getElementsByTagName("cbc:RegistrationName")[0].value);
-      console.log(xml.getElementsByTagName("cbc:Line")[0].value);
-      console.log(xml.getElementsByTagName("cbc:ID")[1].value);
-      console.log(xml.getElementsByTagName("cbc:IssueDate")[0].value);
+      const xml = new XMLParser().parseFromString(xmlDoc.document);
       setBoleta({
         id: xml.getElementsByTagName("cbc:ID")[1].value,
         subtotal: xml.getElementsByTagName("cbc:TaxableAmount")[0].value,
@@ -65,6 +59,7 @@ function App() {
         total: xml.getElementsByTagName("cbc:PayableAmount")[0].value,
         dni: xml.getElementsByTagName("cbc:ID")[3].value,
         fecha: xml.getElementsByTagName("cbc:IssueDate")[0].value,
+        type:xmlDoc.type
       });
       const prices = [];
       xml.getElementsByTagName("cbc:PriceAmount").map((item, index) => {
@@ -73,7 +68,6 @@ function App() {
         }
       });
       const amounts = [];
-      console.log(prices);
       xml.getElementsByTagName("cbc:LineExtensionAmount").map((item, index) => {
         if (index > 0) {
           amounts.push(item.value);
@@ -81,7 +75,6 @@ function App() {
         return;
       });
 
-      //  console.log(xml.getElementsByTagName("cbc:InvoicedQuantity").value)
       const table = [];
       xml.getElementsByTagName("cbc:Description").map((item, index) => {
         table.push({
@@ -99,34 +92,8 @@ function App() {
         });
       });
       seTable(table);
-      console.log(amounts);
-      console.log(table);
-      console.log(xml.getElementsByTagName("cbc:InvoicedQuantity"));
-      console.log(xml.getElementsByTagName("cbc:Description"));
-      console.log(xml.getElementsByTagName("cbc:TaxableAmount")[0].value);
-      console.log(xml.getElementsByTagName("cbc:TaxAmount")[0].value);
-      console.log(xml.getElementsByTagName("cbc:PayableAmount")[0].value);
-      console.log(xml.getElementsByTagName("cbc:Note")[0].value);
-      console.log(xml.getElementsByTagName("cbc:RegistrationName")[1].value);
-
-      console.log(
-        xml
-          .getElementsByTagName("cbc:RegistrationName")[1]
-          .value.substring(
-            0,
-            xml.getElementsByTagName("cbc:RegistrationName")[1].value.length - 1
-          )
-      );
-      console.log(
-        xml
-          .getElementsByTagName("cbc:Note")[0]
-          .value.substring(
-            0,
-            xml.getElementsByTagName("cbc:Note")[0].value.length - 1
-          )
-      );
     }
-  }, [xmlDoc]);
+  }, [xmlDoc,type]);
   return (
     <div className="App">
       <PDFViewer style={{ width: "100%", height: "90vh" }}>

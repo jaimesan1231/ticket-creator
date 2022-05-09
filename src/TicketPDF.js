@@ -60,7 +60,7 @@ function TicketPDF({ table, boleta }) {
               fontFamily: "Roboto Bold",
             }}
           >
-            Boleta de Venta Electrónica
+          {boleta.type=="BOLETA"?"Boleta de Venta electrónica":"Factura Electrónica"}
           </Text>
           <Text
             style={{
